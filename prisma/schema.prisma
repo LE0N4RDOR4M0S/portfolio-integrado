@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Repository {
+  id              String         @id @default(cuid())
+  githubId        Int            @unique
+  name            String
+  description     String?
+  readme          String?        @db.Text
+  language        String?
+  stars           Int            @default(0)
+  forks           Int            @default(0)
+  isArchived      Boolean        @default(false)
+  isPrivate       Boolean        @default(false)
+  url             String
+  pushedAt        DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  commitStats     CommitStats[]
+  projectScore    ProjectScore?
+  technicalFacts  TechnicalFact[]
+}
+
+model CommitStats {
+  id              String     @id @default(cuid())
+  repositoryId    String
+  date            DateTime
+  commitsCount    Int        @default(0)
+
+  @@unique([repositoryId, date])
+  @@index([repositoryId])
+
+  repository      Repository @relation(fields: [repositoryId], references: [id])
+}
+
+model ProjectScore {
+  id                String       @id @default(cuid())
+  repositoryId      String       @unique
+  
+  activityScore     Float
+  popularityScore   Float
+  consistencyScore  Float
+  finalScore        Float
+  
+  status            String
+  
+  lastCalculated    DateTime     @default(now())
+  
+  repository        Repository   @relation(fields: [repositoryId], references: [id])
+}
+
+model TechnicalFact {
+  id              String       @id @default(cuid())
+  repositoryId    String
+  
+  factType        String
+  value           String
+  confidence      String       @default("DETERMINISTIC") 
+  
+  description     String       @db.Text
+  
+  createdAt       DateTime     @default(now())
+  
+  repository      Repository   @relation(fields: [repositoryId], references: [id])
+  
+  @@index([repositoryId, factType])
+}
