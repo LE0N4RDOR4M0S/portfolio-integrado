@@ -14,7 +14,6 @@ export async function getPortfolioData() {
       projects: (await projectsRes.json()) as Project[],
     };
   } catch (e) {
-    console.error("Erro ao buscar dados:", e);
     return {
       stats: { totalProjects: 0, totalCommits: 0, totalStars: 0, mainLanguage: 'Offline' },
       projects: []

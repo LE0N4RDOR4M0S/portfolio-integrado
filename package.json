@@ -9,14 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@huggingface/inference": "^4.13.5",
     "@octokit/rest": "^22.0.1",
     "@prisma/client": "^5.10.0",
     "@tailwindcss/typography": "^0.5.19",
+    "ai": "^3.4.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
+    "openai": "^4.104.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-markdown": "^10.1.0",

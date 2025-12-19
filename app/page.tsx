@@ -8,6 +8,7 @@ import { Projects } from './components/sections/Projects';
 import { Footer } from './components/layout/Footer';
 import { getPortfolioData } from './lib/api';
 import { AnalyticsDashboard } from './components/sections/AnalyticsDashboard'; // <--- Importe
+import { ChatWidget } from './components/ui/ChatWidget';
 
 export default async function Home() {
   const { stats, projects } = await getPortfolioData();
@@ -28,6 +29,7 @@ export default async function Home() {
 
         </div>
       </main>
+      <ChatWidget />
     </>
   );
 }
