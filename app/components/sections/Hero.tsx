@@ -19,8 +19,13 @@ export function Hero() {
       </div>
 
       <p className="text-base text-muted-foreground leading-relaxed mb-8 max-w-2xl text-balance">
-        Graduando em Ciência da Computação (UFMT) com experiência real em <strong className="text-foreground">Sistemas Corporativos</strong> e <strong className="text-foreground">Engenharia de Dados</strong>. 
-        Explorando a interseção entre DevOps, arquitetura escalável e IA Aplicada.
+        Graduando em Ciência da Computação pela UFMT, com vivência prática em
+        <strong className="text-foreground"> desenvolvimento de sistemas</strong> e
+        <strong className="text-foreground"> engenharia de software de verdade</strong>.
+        Curto resolver problema grande, quebrar arquitetura quando precisa e explorar
+        o caos controlado entre <strong className="text-foreground">DevOps</strong>,
+        <strong className="text-foreground"> sistemas escaláveis</strong> e
+        <strong className="text-foreground"> IA aplicada</strong>.
       </p>
 
       <div className="flex flex-wrap gap-3">
