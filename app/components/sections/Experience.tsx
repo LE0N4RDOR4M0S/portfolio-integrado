@@ -6,11 +6,19 @@ export function Experience() {
     <section>
       <SectionTitle id="experience" title="Jornada Profissional" icon={Briefcase} />
       <div className="mt-8 space-y-0">
-        <TimelineItem 
-           year="Jun 2024 - Atual" 
-           title="Estágio em Desenvolvimento & DevOps" 
-           place="Controladoria Geral do Estado (CGE-MT)" 
-           description="Desenvolvimento Full Stack (Spring Boot, Vue.js) e Engenharia de Dados com PySpark..."
+        <TimelineItem
+          year="Jun 2024 - Atual"
+          title="Estágio em Desenvolvimento & DevOps"
+          place="Controladoria Geral do Estado (CGE-MT)"
+          description="Desenvolvimento Full Stack (Spring Boot, Vue.js) e Engenharia de Dados com PySpark"
+        />
+      </div>
+      <div>
+        <TimelineItem
+          year="Mai 2024 - Atual"
+          title="Desenvolvedor e Diretor de Projetos Voluntário"
+          place="Infocorp Jr. (Empresa Júnior de TI - UFMT)"
+          description="Liderança de projetos de desenvolvimento de software para clientes reais"
         />
       </div>
     </section>

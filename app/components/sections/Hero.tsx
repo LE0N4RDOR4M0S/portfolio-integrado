@@ -10,7 +10,7 @@ export function Hero() {
             Leonardo Ramos
           </h1>
           <p className="text-lg text-muted-foreground font-medium">
-            Full Stack Developer & Data Engineer
+            Full Stack Developer
           </p>
         </div>
         <div className="h-24 w-24 rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-700 border border-border shadow-sm flex items-center justify-center text-3xl">
