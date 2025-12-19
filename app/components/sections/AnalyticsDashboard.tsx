@@ -7,7 +7,7 @@ import {
 } from 'recharts';
 import { SectionTitle } from '../ui/SectionTitle';
 import { BarChart3 } from 'lucide-react';
-import { Stats } from '@/types';
+import { Stats } from '../../types';
 
 const COLORS = ['#2563eb', '#16a34a', '#d97706', '#dc2626', '#9333ea']; 
 // (Blue, Green, Amber, Red, Purple)

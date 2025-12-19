@@ -2,7 +2,6 @@ import OpenAI from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { buildPortfolioContext } from '@/lib/ai-context';
 
-// Configuração do cliente Groq
 const groq = new OpenAI({
   apiKey: process.env.GROQ_API_KEY,
   baseURL: 'https://api.groq.com/openai/v1',
@@ -28,7 +27,7 @@ export async function POST(req: Request) {
       top_p: 0.9,
     });
 
-    const stream = OpenAIStream(response);
+    const stream = OpenAIStream(response as any);
     return new StreamingTextResponse(stream);
 
   } catch (error: any) {

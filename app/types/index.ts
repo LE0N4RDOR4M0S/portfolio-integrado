@@ -15,9 +15,9 @@ export type Project = {
   updatedAt: string;
   projectScore: ProjectScore | null;
   readme: string | null;
+  topics: string[];
 };
 
-// Adicione isso ao final de types/index.ts
 
 export type ChartData = {
   languages: { name: string; value: number }[];
@@ -25,11 +25,10 @@ export type ChartData = {
   radar: { subject: string; A: number; fullMark: number }[];
 };
 
-// Atualize o tipo Stats existente
 export type Stats = {
   totalProjects: number;
   totalCommits: number;
   totalStars: number;
   mainLanguage: string;
-  charts?: ChartData; // <--- Novo campo opcional
+  charts?: ChartData;
 };
