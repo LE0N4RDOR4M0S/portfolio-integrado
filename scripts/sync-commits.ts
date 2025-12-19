@@ -20,7 +20,6 @@ async function main() {
       });
 
       if (commits.length === 0) {
-        console.log(`   Running clean: Nenhum commit recente.`);
         continue;
       }
 
