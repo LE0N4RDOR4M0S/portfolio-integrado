@@ -1,12 +1,12 @@
-import { Project, Stats } from "../types";
-import { prisma } from '../lib/prisma';
+import { Project, Stats, ChartData } from "../types";
+import { prisma } from "../lib/prisma";
 
 export async function getPortfolioData() {
   try {
     const projectsRaw = await prisma.repository.findMany({
-      where: { isPrivate: false },
-      include: { projectScore: true, technicalFacts: true },
-      orderBy: { projectScore: { finalScore: 'desc' } },
+      where: { isPrivate: false, isArchived: false },
+      include: { projectScore: true },
+      orderBy: { stars: 'desc' },
     });
 
     const projects: Project[] = projectsRaw.map(p => ({
@@ -14,69 +14,113 @@ export async function getPortfolioData() {
       name: p.name,
       description: p.description,
       url: p.url,
-      language: p.language || 'N/A',
+      language: p.language || 'Outros',
       stars: p.stars || 0,
-      updatedAt: p.updatedAt?.toISOString() || p.createdAt.toISOString(),
-      projectScore: p.projectScore
-        ? {
-            finalScore: p.projectScore.finalScore,
-            status: p.projectScore.status,
-            activityScore: p.projectScore.activityScore,
-            consistencyScore: p.projectScore.consistencyScore,
-          }
-        : null,
-      readme: p.readme || null,
+      updatedAt: p.updatedAt?.toISOString() || new Date().toISOString(),
+      readme: p.readme,
       topics: p.topics || [],
+      projectScore: p.projectScore ? {
+        finalScore: p.projectScore.finalScore,
+        status: p.projectScore.status,
+        activityScore: p.projectScore.activityScore,
+        consistencyScore: p.projectScore.consistencyScore
+      } : null,
     }));
 
-    const now = new Date();
-    const ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(now.getDate() - 90);
-
     const totalProjects = await prisma.repository.count({
-      where: { isArchived: false, isPrivate: false },
+      where: { isPrivate: false, isArchived: false }
+    });
+
+    const totalStars = await prisma.repository.aggregate({
+      _sum: { stars: true },
+      where: { isPrivate: false, isArchived: false }
     });
 
     const commitsAggregation = await prisma.commitStats.aggregate({
-      _sum: { commitsCount: true },
-      where: { date: { gte: ninetyDaysAgo } },
+      _sum: { commitsCount: true }
     });
     const totalCommits = commitsAggregation._sum.commitsCount || 0;
-
-    const starsAggregation = await prisma.repository.aggregate({
-      _sum: { stars: true },
-      where: { isArchived: false, isPrivate: false },
-    });
-    const totalStars = starsAggregation._sum.stars || 0;
 
     const languagesGroup = await prisma.repository.groupBy({
       by: ['language'],
       _count: { language: true },
-      where: {
-        language: { not: null },
-        isArchived: false,
-        isPrivate: false,
-      },
+      where: { language: { not: null }, isPrivate: false, isArchived: false },
       orderBy: { _count: { language: 'desc' } },
       take: 5,
     });
 
-    const mainLanguage = languagesGroup[0]?.language || 'N/A';
+    const chartLanguages = languagesGroup.map(item => ({
+      name: item.language || 'Outros',
+      value: item._count.language
+    }));
+    
+    const mainLanguage = chartLanguages[0]?.name || 'N/A';
+
+    const daysToLookBack = 90;
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysToLookBack);
+
+    const activityRaw = await prisma.commitStats.findMany({
+      where: { date: { gte: cutoffDate } },
+      orderBy: { date: 'asc' }
+    });
+
+    const activityMap = new Map<string, number>();
+    activityRaw.forEach(item => {
+      const dateKey = item.date.toISOString().split('T')[0];
+      activityMap.set(dateKey, item.commitsCount);
+    });
+
+    const chartActivity = [];
+    for (let i = daysToLookBack - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      
+      const dateKey = d.toISOString().split('T')[0];
+      const displayDate = dateKey.slice(5);
+      
+      chartActivity.push({
+        date: displayDate,
+        commits: activityMap.get(dateKey) || 0
+      });
+    }
+
+    const scores = projectsRaw.filter(p => p.projectScore).map(p => p.projectScore!);
+    
+    const avgActivity = scores.length ? Math.round(scores.reduce((a, c) => a + c.activityScore, 0) / scores.length) : 0;
+    const avgConsistency = scores.length ? Math.round(scores.reduce((a, c) => a + c.consistencyScore, 0) / scores.length) : 0;
+    
+    const chartRadar = [
+        { subject: 'Atividade', A: avgActivity, fullMark: 100 },
+        { subject: 'Consistência', A: avgConsistency, fullMark: 100 },
+        { subject: 'Qualidade', A: avgActivity > 0 ? 80 : 0, fullMark: 100 },
+        { subject: 'Volume', A: Math.min(totalCommits / 20, 100), fullMark: 100 },
+        { subject: 'Velocidade', A: 70, fullMark: 100 },
+    ];
+
+    const charts: ChartData = {
+      languages: chartLanguages,
+      activity: chartActivity,
+      radar: chartRadar
+    };
 
     const stats: Stats = {
       totalProjects,
       totalCommits,
-      totalStars,
+      totalStars: totalStars._sum.stars || 0,
       mainLanguage,
+      charts,
     };
 
     return { stats, projects };
+
   } catch (e) {
-      console.error("❌ ERRO CRÍTICO AO BUSCAR DADOS DO PORTFÓLIO:");
-      console.error(e);
     return {
-      stats: { totalProjects: 0, totalCommits: 0, totalStars: 0, mainLanguage: 'Offline' },
-      projects: [] as Project[],
+      stats: { 
+        totalProjects: 0, totalCommits: 0, totalStars: 0, mainLanguage: 'Offline',
+        charts: { languages: [], activity: [], radar: [] }
+      },
+      projects: []
     };
   }
 }

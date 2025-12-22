@@ -13,7 +13,7 @@ export function Experience() {
           description="Desenvolvimento Full Stack (Spring Boot, Vue.js) e Engenharia de Dados com PySpark"
         />
       </div>
-      <div>
+      <div className="mt-8 space-y-0">
         <TimelineItem
           year="Mai 2024 - Atual"
           title="Desenvolvedor e Diretor de Projetos Voluntário"
