@@ -7,8 +7,11 @@ import { Education } from './components/sections/Education';
 import { Projects } from './components/sections/Projects';
 import { Footer } from './components/layout/Footer';
 import { getPortfolioData } from './lib/api';
-import { AnalyticsDashboard } from './components/sections/AnalyticsDashboard'; // <--- Importe
+import { AnalyticsDashboard } from './components/sections/AnalyticsDashboard';
 import { ChatWidget } from './components/ui/ChatWidget';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function Home() {
   const { stats, projects } = await getPortfolioData();
