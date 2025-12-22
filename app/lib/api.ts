@@ -74,7 +74,8 @@ export async function getPortfolioData() {
 
     return { stats, projects };
   } catch (e) {
-    // Safe fallback so pages don't crash at build or runtime
+      console.error("❌ ERRO CRÍTICO AO BUSCAR DADOS DO PORTFÓLIO:");
+      console.error(e);
     return {
       stats: { totalProjects: 0, totalCommits: 0, totalStars: 0, mainLanguage: 'Offline' },
       projects: [] as Project[],
