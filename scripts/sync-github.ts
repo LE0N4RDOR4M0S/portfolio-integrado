@@ -8,7 +8,10 @@ const prisma = new PrismaClient();
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 async function main() {
+  console.log("🚀 [Sync-GitHub] Iniciando sincronização...");
+
   const { data: user } = await octokit.rest.users.getAuthenticated();
+  console.log(`👤 Usuário autenticado: ${user.login}`);
 
   const { data: repos } = await octokit.rest.repos.listForAuthenticatedUser({
     sort: 'updated',
@@ -16,6 +19,10 @@ async function main() {
     per_page: 100,
     type: 'owner',
   });
+
+  console.log(`📦 Encontrados ${repos.length} repositórios.`);
+
+  let processedCount = 0;
 
   for (const repo of repos) {
     if (repo.private) {
@@ -32,7 +39,8 @@ async function main() {
         },
       });
       readmeContent = String(readme);
-    } catch (e) {}
+    } catch (e) {
+    }
 
     await prisma.repository.upsert({
       where: { githubId: repo.id },
@@ -63,11 +71,15 @@ async function main() {
         pushedAt: repo.pushed_at ? new Date(repo.pushed_at) : null,
       },
     });
+    processedCount++;
   }
+  
+  console.log(`✅ [Sync-GitHub] Processados ${processedCount} repositórios com sucesso.`);
 }
 
 main()
   .catch((e) => {
+    console.error("❌ [Sync-GitHub] Erro fatal:", e);
     process.exit(1);
   })
   .finally(async () => {
