@@ -28,6 +28,7 @@ export type ChartData = {
 export type Stats = {
   totalProjects: number;
   totalCommits: number;
+  commitsLast90Days: number;
   totalStars: number;
   mainLanguage: string;
   charts?: ChartData;

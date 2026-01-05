@@ -2,9 +2,14 @@
 
 import { X, Github, ExternalLink, Calendar, Star, GitFork } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import Link from 'next/link';
 import { Project } from '../../types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ProjectModalProps {
   project: Project;
@@ -13,6 +18,18 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDark(darkModeQuery.matches);
+    
+    const handleChange = (e: MediaQueryListEvent) => setIsDark(e.matches);
+    darkModeQuery.addEventListener('change', handleChange);
+    
+    return () => darkModeQuery.removeEventListener('change', handleChange);
+  }, []);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -65,14 +82,115 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
         <div className="flex-1 overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
           {project.readme ? (
             <div className="prose dark:prose-invert prose-zinc max-w-none 
-              prose-headings:font-bold prose-headings:tracking-tight
-              prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
-              prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-              prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800 prose-pre:text-zinc-50
-              prose-code:text-pink-600 dark:prose-code:text-pink-400 prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-              prose-img:rounded-lg prose-img:border prose-img:border-border"
+              prose-headings:font-bold prose-headings:tracking-tight prose-headings:border-b prose-headings:border-border/50 prose-headings:pb-2
+              prose-h1:text-3xl prose-h1:mt-0 prose-h1:mb-6
+              prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
+              prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3 prose-h3:border-0
+              prose-h4:text-lg prose-h4:mt-4 prose-h4:border-0
+              prose-p:leading-7 prose-p:my-4
+              prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:font-medium
+              prose-strong:text-foreground prose-strong:font-semibold
+              prose-code:text-pink-600 dark:prose-code:text-pink-400 prose-code:bg-muted/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+              prose-pre:bg-transparent prose-pre:p-0 prose-pre:m-0
+              prose-blockquote:border-l-4 prose-blockquote:border-primary/40 prose-blockquote:bg-muted/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic
+              prose-ul:my-4 prose-ol:my-4 prose-li:my-1
+              prose-table:border-collapse prose-table:w-full prose-table:my-6
+              prose-thead:bg-muted
+              prose-th:border prose-th:border-border prose-th:px-4 prose-th:py-2 prose-th:text-left prose-th:font-semibold
+              prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2
+              prose-tr:border-b prose-tr:border-border
+              prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-md prose-img:my-6 prose-img:mx-auto
+              prose-hr:border-border prose-hr:my-8"
             >
-              <ReactMarkdown>{project.readme}</ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                components={{
+                  code({ node, inline, className, children, ...props }: any) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    const language = match ? match[1] : '';
+                    
+                    return !inline && language ? (
+                      <div className="my-4 rounded-lg overflow-hidden border border-border shadow-sm">
+                        <div className="bg-muted/80 px-4 py-2 border-b border-border flex items-center justify-between">
+                          <span className="text-xs font-mono text-muted-foreground uppercase">{language}</span>
+                        </div>
+                        <SyntaxHighlighter
+                          style={isDark ? oneDark : oneLight}
+                          language={language}
+                          PreTag="div"
+                          customStyle={{
+                            margin: 0,
+                            borderRadius: 0,
+                            background: isDark ? '#1e1e1e' : '#fafafa',
+                            fontSize: '0.875rem',
+                            padding: '1rem',
+                          }}
+                          codeTagProps={{
+                            style: {
+                              fontFamily: 'var(--font-mono), ui-monospace, monospace',
+                            }
+                          }}
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      </div>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                  a({ node, children, href, ...props }: any) {
+                    const isExternal = href?.startsWith('http');
+                    return (
+                      <a
+                        href={href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        {...props}
+                      >
+                        {children}
+                        {isExternal && <ExternalLink className="inline ml-1 w-3 h-3" />}
+                      </a>
+                    );
+                  },
+                  img({ node, src, alt, ...props }: any) {
+                    return (
+                      <img
+                        src={src}
+                        alt={alt || ''}
+                        loading="lazy"
+                        {...props}
+                      />
+                    );
+                  },
+                  table({ node, children, ...props }: any) {
+                    return (
+                      <div className="overflow-x-auto my-6">
+                        <table {...props}>{children}</table>
+                      </div>
+                    );
+                  },
+                  input({ node, type, checked, ...props }: any) {
+                    if (type === 'checkbox') {
+                      return (
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          disabled
+                          className="mr-2 accent-primary"
+                          {...props}
+                        />
+                      );
+                    }
+                    return <input type={type} {...props} />;
+                  },
+                }}
+              >
+                {project.readme}
+              </ReactMarkdown>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-muted-foreground text-center">

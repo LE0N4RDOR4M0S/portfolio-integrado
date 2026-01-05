@@ -20,7 +20,7 @@ export default async function Home() {
     <>
       <Navbar />
       <main className="min-h-screen bg-background font-sans selection:bg-primary/10 pt-16">
-        <div className="max-w-3xl mx-auto px-6 py-10">
+        <div className="max-w-4xl mx-auto px-6 md:px-8 py-12">
           <Hero />
           <StatsCards stats={stats} />
           <AnalyticsDashboard stats={stats} />
@@ -29,7 +29,6 @@ export default async function Home() {
           <Education />
           <Projects data={projects} />
           <Footer />
-
         </div>
       </main>
       <ChatWidget />

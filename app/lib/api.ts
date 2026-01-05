@@ -104,9 +104,19 @@ export async function getPortfolioData() {
       radar: chartRadar
     };
 
+    const last90DaysCommitsAgg = await prisma.commitStats.aggregate({
+      _sum: { commitsCount: true },
+      where: {
+        date: { gte: cutoffDate }
+      }
+    });
+
+    const commitsLast90Days = last90DaysCommitsAgg._sum.commitsCount || 0;
+
     const stats: Stats = {
       totalProjects,
       totalCommits,
+      commitsLast90Days,
       totalStars: totalStars._sum.stars || 0,
       mainLanguage,
       charts,
@@ -116,8 +126,12 @@ export async function getPortfolioData() {
 
   } catch (e) {
     return {
-      stats: { 
-        totalProjects: 0, totalCommits: 0, totalStars: 0, mainLanguage: 'Offline',
+      stats: {
+        totalProjects: 0,
+        totalCommits: 0,
+        commitsLast90Days: 0,
+        totalStars: 0,
+        mainLanguage: 'Offline',
         charts: { languages: [], activity: [], radar: [] }
       },
       projects: []

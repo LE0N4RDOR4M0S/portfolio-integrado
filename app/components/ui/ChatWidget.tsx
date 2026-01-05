@@ -40,7 +40,7 @@ export function ChatWidget() {
                 <h3 className="font-semibold text-sm">Leonardo AI Assistant</h3>
                 <p className="text-[10px] text-zinc-400 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/>
-                  Llama-3-8B Online
+                  Llama-3.1-8B-instant Online
                 </p>
               </div>
             </div>
