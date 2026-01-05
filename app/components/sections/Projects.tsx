@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Terminal, ArrowUpRight, FileText, Activity } from 'lucide-react';
+import { Terminal, FileText, Activity } from 'lucide-react';
 import { SectionTitle } from '../ui/SectionTitle';
 import { Project } from '../../types';
 import { ProjectModal } from '../ui/ProjectModal';
@@ -9,25 +9,28 @@ import { ProjectModal } from '../ui/ProjectModal';
 export function Projects({ data }: { data: Project[] }) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  const topProjects = [...data]
+    .sort((a, b) => (b.projectScore?.finalScore ?? 0) - (a.projectScore?.finalScore ?? 0))
+    .slice(0, 6);
+
   return (
     <section id="projects" className="scroll-mt-24">
       <SectionTitle title="Projetos (Data-Driven)" icon={Terminal} />
       
       <p className="text-sm text-muted-foreground mb-6 -mt-2">
-        Projetos sincronizados automaticamente do GitHub. Classificação de saúde ("Status") gerada via algoritmo baseado em frequência de commits e consistência.
+        Top projetos sincronizados automaticamente do GitHub. Classificação de saúde gerada via algoritmo baseado em frequência de commits e consistência.
       </p>
       
-      <div className="flex flex-col gap-4">
-        {data.map((repo) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {topProjects.map((repo) => (
           <div 
             key={repo.id} 
             onClick={() => setSelectedProject(repo)}
             className="group relative block p-5 bg-card border border-border rounded-xl hover:border-primary/40 hover:shadow-md transition-all cursor-pointer overflow-hidden"
           >
-            <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/[0.02] transition-colors" />
+            <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/2 transition-colors" />
 
             <div className="relative">
-              {/* Header do Card */}
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold text-foreground text-lg group-hover:text-primary transition-colors flex items-center gap-2">
                   {repo.name}
@@ -35,24 +38,22 @@ export function Projects({ data }: { data: Project[] }) {
                 </h3>
                 
                 {repo.projectScore && (
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border shadow-sm
-                      ${repo.projectScore.status.includes('Fogo') || repo.projectScore.status.includes('Fire') 
-                        ? 'bg-orange-500/10 text-orange-600 border-orange-500/20' 
-                        : repo.projectScore.status.includes('Consistente') || repo.projectScore.status.includes('Ativo') 
-                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' 
-                        : repo.projectScore.status.includes('Experimental') 
-                        ? 'bg-blue-500/10 text-blue-600 border-blue-500/20'
-                        : 'bg-zinc-500/10 text-zinc-500 border-zinc-500/20'
-                      }`}>
-                      {repo.projectScore.status}
-                    </span>
-                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border shadow-sm
+                    ${repo.projectScore.status.includes('Fogo') || repo.projectScore.status.includes('Fire') 
+                      ? 'bg-orange-500/10 text-orange-600 border-orange-500/20' 
+                      : repo.projectScore.status.includes('Consistente') || repo.projectScore.status.includes('Ativo') 
+                      ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' 
+                      : repo.projectScore.status.includes('Experimental') 
+                      ? 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+                      : 'bg-zinc-500/10 text-zinc-500 border-zinc-500/20'
+                    }`}>
+                    {repo.projectScore.status}
+                  </span>
                 )}
               </div>
               
               <p className="text-sm text-muted-foreground mb-5 line-clamp-2 leading-relaxed">
-                 {repo.description || "Clique para ver os detalhes técnicos e documentação."}
+                {repo.description || "Clique para ver os detalhes técnicos e documentação."}
               </p>
               
               {repo.projectScore && (
@@ -69,8 +70,8 @@ export function Projects({ data }: { data: Project[] }) {
                   <div className="h-2 w-full bg-secondary/80 rounded-full overflow-hidden">
                     <div 
                       className={`h-full rounded-full transition-all duration-1000 ease-out 
-                        ${repo.projectScore.finalScore > 80 ? 'bg-gradient-to-r from-orange-500 to-red-500' : 
-                          repo.projectScore.finalScore > 50 ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 
+                        ${repo.projectScore.finalScore > 80 ? 'bg-linear-to-r from-orange-500 to-red-500' : 
+                          repo.projectScore.finalScore > 50 ? 'bg-linear-to-r from-emerald-500 to-teal-500' : 
                           'bg-zinc-500'}`} 
                       style={{ width: `${repo.projectScore.finalScore}%` }}
                     />

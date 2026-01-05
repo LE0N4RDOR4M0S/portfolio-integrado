@@ -12,7 +12,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
           {stats.totalProjects}
         </div>
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold mt-1">
-          Projetos Ativos
+          Projetos
         </div>
       </div>
 
