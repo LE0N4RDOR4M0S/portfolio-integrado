@@ -3,66 +3,64 @@ import Link from 'next/link';
 
 export function Hero() {
   return (
-    <header id="hero" className="mb-16 pt-10 scroll-mt-24">
-      <div className="flex flex-col-reverse md:flex-row gap-10 items-start md:items-center mb-10">
+    <header id="hero" className="mb-20 pt-12 scroll-mt-24">
+      <div className="flex flex-col-reverse md:flex-row gap-12 items-start md:items-center mb-12">
         <div className="flex-1">
-          <div className="inline-block mb-3">
-            <span className="text-xs font-semibold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950 px-3 py-1.5 rounded-full border border-green-200 dark:border-green-800">
-              ✦ Disponível para oportunidades
+          <div className="inline-block mb-6">
+            <span className="inline-flex items-center gap-2 text-sm font-semibold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/50 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800/50">
+              ● Disponível para projetos
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-3 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text">
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-4 leading-tight">
             Leonardo Ramos
           </h1>
-          <p className="text-xl text-muted-foreground font-medium mb-1">
+          <p className="text-xl text-slate-600 dark:text-slate-300 font-semibold mb-2">
             Full Stack Developer
           </p>
-          <p className="text-sm text-muted-foreground/80">
+          <p className="text-base text-slate-500 dark:text-slate-400 mb-8">
             Ciência da Computação • UFMT
           </p>
         </div>
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-          <div className="relative h-28 w-28 md:h-32 md:w-32 rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-700 border-2 border-border shadow-xl flex items-center justify-center overflow-hidden">
-            <img src="/perfil.jpg" className="rounded-full object-cover w-full h-full" alt="Leonardo Ramos" />
+        <div className="flex-shrink-0">
+          <div className="relative h-40 w-40 md:h-48 md:w-48 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 border border-slate-300 dark:border-slate-600 shadow-lg flex items-center justify-center overflow-hidden">
+            <img src="/perfil.jpg" className="rounded-xl object-cover w-full h-full" alt="Leonardo Ramos" />
           </div>
         </div>
       </div>
 
-      <div className="relative mb-10 max-w-2xl">
-        <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/50 via-primary/20 to-transparent rounded-full"></div>
-        <p className="text-base text-muted-foreground leading-relaxed text-balance pl-4">
+      <div className="relative mb-12 max-w-2xl">
+        <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-balance">
           Desenvolvedor com vivência prática em
-          <strong className="text-foreground font-semibold"> desenvolvimento de sistemas</strong> e
-          <strong className="text-foreground font-semibold"> engenharia de software de verdade</strong>.
+          <span className="font-semibold text-foreground"> desenvolvimento de sistemas</span> e
+          <span className="font-semibold text-foreground"> engenharia de software</span>.
           Focado em resolver problemas complexos, criar arquiteturas escaláveis e explorar
-          o potencial entre <strong className="text-foreground font-semibold">DevOps</strong>,
-          <strong className="text-foreground font-semibold"> sistemas distribuídos</strong> e
-          <strong className="text-foreground font-semibold"> IA aplicada</strong>.
+          o potencial entre <span className="font-semibold text-foreground">DevOps</span>,
+          <span className="font-semibold text-foreground"> sistemas distribuídos</span> e
+          <span className="font-semibold text-foreground"> IA aplicada</span>.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2.5">
+      <div className="flex flex-wrap gap-3">
         <SocialButton href="https://github.com/LE0N4RDOR4M0S" icon={Github} label="GitHub" />
-        <SocialButton href="https://linkedin.com/in/leonardo-de-oliveira-ramos-690318270" icon={Linkedin} label="LinkedIn" colorClass="hover:bg-blue-600 hover:text-white hover:border-blue-600" />
-        <SocialButton href="https://medium.com/@leoolivramos" icon={BookOpen} label="Medium" colorClass="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:border-black dark:hover:border-white" />
-        <SocialButton href="mailto:leoolivramos@gmail.com" icon={Mail} label="Email" colorClass="hover:bg-red-600 hover:text-white hover:border-red-600" />
-        <SocialButton href="https://wa.me/5565992121341" icon={Phone} label="Contato" colorClass="hover:bg-green-600 hover:text-white hover:border-green-600" />
-        <SocialButton href="/Leonardo_Ramos_CV.pdf" icon={Download} label="Baixar CV" colorClass="hover:bg-primary hover:text-primary-foreground hover:border-primary" download />
+        <SocialButton href="https://linkedin.com/in/leonardo-de-oliveira-ramos-690318270" icon={Linkedin} label="LinkedIn" />
+        <SocialButton href="https://medium.com/@leoolivramos" icon={BookOpen} label="Medium" />
+        <SocialButton href="mailto:leoolivramos@gmail.com" icon={Mail} label="Email" />
+        <SocialButton href="https://wa.me/5565992121341" icon={Phone} label="WhatsApp" />
+        <SocialButton href="/Leonardo_Ramos_CV.pdf" icon={Download} label="CV" download />
       </div>
     </header>
   );
 }
 
-function SocialButton({ href, icon: Icon, label, colorClass = "hover:bg-primary hover:text-primary-foreground hover:border-primary", download }: any) {
+function SocialButton({ href, icon: Icon, label, download }: any) {
   return (
     <Link 
       href={href} 
       target="_blank" 
       download={download}
-      className={`group inline-flex items-center gap-2 px-4 py-2.5 bg-card border border-border text-foreground text-sm font-medium rounded-lg transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${colorClass}`}
+      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-foreground text-sm font-semibold rounded-lg hover:border-slate-400 dark:hover:border-slate-600 hover:shadow-md transition-shadow"
     >
-      <Icon size={18} className="transition-transform group-hover:scale-110" /> 
+      <Icon size={18} /> 
       <span>{label}</span>
     </Link>
   );

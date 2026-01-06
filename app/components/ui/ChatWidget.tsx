@@ -31,7 +31,7 @@ export function ChatWidget() {
       {isOpen && (
         <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300">
 
-          <div className="p-4 bg-zinc-900 text-white flex justify-between items-center">
+          <div className="p-4 text-white flex justify-between items-center">
             <div className="flex items-center gap-2.5">
               <div className="p-1.5 bg-white/10 rounded-lg">
                 <Sparkles size={16} className="text-emerald-400" />
