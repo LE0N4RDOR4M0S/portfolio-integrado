@@ -44,13 +44,13 @@ async function main() {
       if (repo.isArchived) {
         status = 'Arquivado';
       } else if (finalScore >= 80) {
-        status = 'Em Fogo 🔥';
+        status = 'Em Fogo';
       } else if (finalScore >= 50) {
-        status = 'Consistente 🚀';
+        status = 'Consistente';
       } else if (finalScore >= 20) {
-        status = 'Em Desenvolvimento 🛠️';
+        status = 'Em Desenvolvimento';
       } else {
-        status = 'Hibernando 💤';
+        status = 'Hibernando';
       }
 
       await prisma.projectScore.upsert({
