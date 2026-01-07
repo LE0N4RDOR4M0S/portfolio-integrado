@@ -31,19 +31,43 @@ async function main() {
 
   for (const repo of repos) {
     try {
-      const { data: commits } = await octokit.rest.repos.listCommits({
-        owner: user.login,
-        repo: repo.name,
-        per_page: 100,
-      });
+      console.log(`  📁 Processando: ${repo.name}...`);
+      
+      let allCommits: any[] = [];
+      let page = 1;
+      let hasMore = true;
 
-      if (commits.length === 0) {
+      // Paginação completa - busca TODOS os commits
+      while (hasMore) {
+        const { data: commits } = await octokit.rest.repos.listCommits({
+          owner: user.login,
+          repo: repo.name,
+          per_page: 100,
+          page: page,
+        });
+
+        if (commits.length === 0) {
+          hasMore = false;
+        } else {
+          allCommits = allCommits.concat(commits);
+          page++;
+          
+          // Se retornou menos que 100, não há mais páginas
+          if (commits.length < 100) {
+            hasMore = false;
+          }
+        }
+      }
+
+      console.log(`    ✓ ${allCommits.length} commits encontrados`);
+
+      if (allCommits.length === 0) {
         continue;
       }
 
       const commitsByDate: Record<string, number> = {};
 
-      for (const commit of commits) {
+      for (const commit of allCommits) {
         const dateStr = commit.commit.author?.date?.split('T')[0]; 
         if (dateStr) {
           commitsByDate[dateStr] = (commitsByDate[dateStr] || 0) + 1;
@@ -68,10 +92,10 @@ async function main() {
       });
 
       await Promise.all(promises);
-      totalCommitsSynced += commits.length;
+      totalCommitsSynced += allCommits.length;
 
     } catch (error) {
-      console.error(`Erro ao processar repo ${repo.name}:`, error);
+      console.error(`❌ Erro ao processar repo ${repo.name}:`, error);
     }
   }
 
