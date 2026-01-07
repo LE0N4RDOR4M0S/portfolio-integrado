@@ -7,29 +7,29 @@ export function Hero() {
       <div className="flex flex-col-reverse md:flex-row gap-12 items-start md:items-center mb-12">
         <div className="flex-1">
           <div className="inline-block mb-6">
-            <span className="inline-flex items-center gap-2 text-sm font-semibold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/50 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800/50">
+            <span className="inline-flex items-center gap-2 text-sm font-semibold text-accent bg-accent/10 px-4 py-2 rounded-lg border border-accent/30">
               ● Disponível para projetos
             </span>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-4 leading-tight">
             Leonardo Ramos
           </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 font-semibold mb-2">
+          <p className="text-xl text-muted-foreground font-semibold mb-2">
             Full Stack Developer
           </p>
-          <p className="text-base text-slate-500 dark:text-slate-400 mb-8">
+          <p className="text-base text-muted-foreground mb-8">
             Ciência da Computação • UFMT
           </p>
         </div>
         <div className="flex-shrink-0">
-          <div className="relative h-40 w-40 md:h-48 md:w-48 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 border border-slate-300 dark:border-slate-600 shadow-lg flex items-center justify-center overflow-hidden">
+          <div className="relative h-40 w-40 md:h-48 md:w-48 rounded-xl bg-gradient-to-br from-muted to-card border border-border shadow-lg flex items-center justify-center overflow-hidden">
             <img src="/perfil.jpg" className="rounded-xl object-cover w-full h-full" alt="Leonardo Ramos" />
           </div>
         </div>
       </div>
 
       <div className="relative mb-12 max-w-2xl">
-        <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-balance">
+        <p className="text-lg text-muted-foreground leading-relaxed text-balance">
           Desenvolvedor com vivência prática em
           <span className="font-semibold text-foreground"> desenvolvimento de sistemas</span> e
           <span className="font-semibold text-foreground"> engenharia de software</span>.
@@ -58,7 +58,7 @@ function SocialButton({ href, icon: Icon, label, download }: any) {
       href={href} 
       target="_blank" 
       download={download}
-      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-foreground text-sm font-semibold rounded-lg hover:border-slate-400 dark:hover:border-slate-600 hover:shadow-md transition-shadow"
+      className="inline-flex items-center gap-2 px-5 py-2.5 bg-card border border-border text-foreground text-sm font-semibold rounded-lg hover:bg-muted/60 hover:shadow-md transition-shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
     >
       <Icon size={18} /> 
       <span>{label}</span>

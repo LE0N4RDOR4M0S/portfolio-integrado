@@ -26,8 +26,8 @@ export function StatsCards({ stats }: StatsCardsProps) {
   );
 }
 
-function StatCard({ 
-  value, 
+function StatCard({
+  value,
   label,
   isText = false
 }: {
@@ -36,8 +36,8 @@ function StatCard({
   isText?: boolean;
 }) {
   return (
-    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
-      <div className="text-slate-600 dark:text-slate-400 text-sm font-medium mb-3 uppercase tracking-wide">
+    <div className="bg-card border border-border rounded-lg p-6 hover:bg-muted/40 transition-colors">
+      <div className="text-muted-foreground text-sm font-medium mb-3 uppercase tracking-wide">
         {label}
       </div>
       

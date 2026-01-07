@@ -9,6 +9,7 @@ import { Footer } from './components/layout/Footer';
 import { getPortfolioData } from './lib/api';
 import { AnalyticsDashboard } from './components/sections/AnalyticsDashboard';
 import { ChatWidget } from './components/ui/ChatWidget';
+import { CommandPaletteWrapper } from './components/ui/CommandPaletteWrapper';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -33,6 +34,7 @@ export default async function Home() {
         </div>
       </main>
       <ChatWidget />
+      <CommandPaletteWrapper />
     </>
   );
 }

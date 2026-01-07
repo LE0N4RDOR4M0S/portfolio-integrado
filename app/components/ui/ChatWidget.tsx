@@ -47,22 +47,22 @@ export function ChatWidget() {
         <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300">
 
           {/* Header */}
-          <div className="p-4 text-white flex justify-between items-center bg-zinc-900 border-b border-zinc-800">
+            <div className="p-4 flex justify-between items-center bg-primary text-primary-foreground border-b border-border">
             <div className="flex items-center gap-2.5">
               <div className="p-1.5 bg-white/10 rounded-lg">
-                <Sparkles size={16} className="text-emerald-400" />
+                  <Sparkles size={16} className="text-accent" />
               </div>
               <div>
                 <h3 className="font-semibold text-sm">Leonardo AI Assistant</h3>
-                <p className="text-[10px] text-zinc-400 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/>
+                <p className="text-[10px] text-current opacity-75 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse"/>
                   Llama-3.1-8B-instant Online
                 </p>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-zinc-400 hover:text-white transition-colors"
+              className="text-current opacity-70 hover:opacity-100 transition-opacity"
             >
               <X size={20} />
             </button>
@@ -75,13 +75,13 @@ export function ChatWidget() {
                 className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-sm border border-border
-                  ${m.role === 'user' ? 'bg-zinc-100 dark:bg-zinc-800' : 'bg-emerald-100 dark:bg-emerald-900/30'}`}>
-                  {m.role === 'user' ? <User size={14} className="text-zinc-600 dark:text-zinc-300"/> : <Bot size={14} className="text-emerald-600 dark:text-emerald-400"/>}
+                  ${m.role === 'user' ? 'bg-accent/10' : 'bg-accent/20'}`}>
+                  {m.role === 'user' ? <User size={14} className="text-accent"/> : <Bot size={14} className="text-accent"/>}
                 </div>
 
                 <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed max-w-[85%] shadow-sm overflow-hidden
                   ${m.role === 'user'
-                    ? 'bg-zinc-900 text-white rounded-tr-sm'
+                    ? 'bg-primary text-primary-foreground rounded-tr-sm'
                     : 'bg-card border border-border text-foreground rounded-tl-sm'}`}>
                   
                   {m.role === 'user' ? (
@@ -96,6 +96,7 @@ export function ChatWidget() {
                         li: ({children}) => <li className="pl-1">{children}</li>,
                         a: ({href, children}) => (
                           <a href={href} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline font-medium break-all">
+                            className="text-accent hover:underline font-medium break-all"
                             {children}
                           </a>
                         ),
@@ -159,6 +160,7 @@ export function ChatWidget() {
           <form onSubmit={handleSubmit} className="p-3 bg-background border-t border-border flex gap-2">
             <input
               className="flex-1 bg-muted/50 border border-border hover:border-zinc-400 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-sm outline-none transition-all placeholder:text-muted-foreground"
+              className="flex-1 bg-muted/50 border border-border hover:border-border focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none transition-all placeholder:text-muted-foreground"
               value={input}
               onChange={handleInputChange}
               placeholder="Pergunte sobre meus projetos..."
@@ -166,7 +168,7 @@ export function ChatWidget() {
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="bg-zinc-900 text-white p-2.5 rounded-xl hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm flex items-center justify-center w-10 h-10"
+              className="bg-primary text-primary-foreground p-2.5 rounded-xl hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm flex items-center justify-center w-10 h-10"
             >
               {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
             </button>
@@ -176,15 +178,15 @@ export function ChatWidget() {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative h-14 w-14 rounded-full bg-zinc-900 text-white shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center border border-zinc-700/50"
+        className="group relative h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center border border-border"
       >
-        <div className="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping opacity-0 group-hover:opacity-100 duration-1000" />
+        <div className="absolute inset-0 rounded-full bg-accent/20 animate-ping opacity-0 group-hover:opacity-100 duration-1000" />
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
 
         {!isOpen && (
           <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-accent"></span>
           </span>
         )}
       </button>

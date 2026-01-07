@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell,
@@ -8,6 +9,7 @@ import {
 import { SectionTitle } from '../ui/SectionTitle';
 import { BarChart3 } from 'lucide-react';
 import { Stats } from '../../types';
+import { useTheme } from 'next-themes';
 
 const COLORS = ['#2563eb', '#16a34a', '#d97706', '#dc2626', '#9333ea']; 
 
@@ -24,11 +26,22 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export function AnalyticsDashboard({ stats }: { stats: Stats }) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (!stats?.charts) return null;
 
   const activityData = stats.charts.activity || [];
   const languagesData = stats.charts.languages || [];
   const radarData = stats.charts.radar || [];
+
+  const isDark = mounted && theme === 'dark';
+  const gridStroke = isDark ? '#3f3f46' : '#e2e8f0';
+  const textColor = isDark ? '#a1a1aa' : '#64748b';
 
   if (activityData.length === 0 && languagesData.length === 0 && radarData.length === 0) {
     return null;
@@ -51,10 +64,10 @@ export function AnalyticsDashboard({ stats }: { stats: Stats }) {
                     <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3f3f46" opacity={0.3} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} opacity={0.3} />
                 <XAxis 
                   dataKey="date" 
-                  tick={{fontSize: 10, fill: '#71717a'}} 
+                  tick={{fontSize: 10, fill: textColor}}
                   axisLine={false} 
                   tickLine={false} 
                   minTickGap={30}
@@ -109,12 +122,12 @@ export function AnalyticsDashboard({ stats }: { stats: Stats }) {
         )}
 
         {radarData.length > 0 && (
-          <div className="bg-card border border-border rounded-xl p-6 h-[300px]">
+          <div className="bg-card border border-border rounded-xl p-6 h-[300px] w-full">
             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Perfil de Engenharia</h3>
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                <PolarGrid stroke="#3f3f46" opacity={0.3} />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: '#71717a', fontSize: 10 }} />
+                <PolarGrid stroke={gridStroke} opacity={0.3} />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: textColor, fontSize: 10 }} />
                 <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                 <Radar
                   name="Performance"

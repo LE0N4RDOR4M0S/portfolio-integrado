@@ -3,8 +3,8 @@ import { SectionTitle } from '../ui/SectionTitle';
 
 export function Experience() {
   return (
-    <section>
-      <SectionTitle id="experience" title="Jornada Profissional" icon={Briefcase} />
+    <section id="experience" className="scroll-mt-24">
+      <SectionTitle title="Jornada Profissional" icon={Briefcase} />
       <div className="mt-8 space-y-0">
         <TimelineItem
           year="Jun 2024 - Atual"
