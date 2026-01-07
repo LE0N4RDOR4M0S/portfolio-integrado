@@ -2,13 +2,15 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useChat } from 'ai/react';
-import { MessageSquare, X, Send, Bot, User, Sparkles, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, User, Sparkles, Loader2, ArrowRight } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
     api: '/api/chat',
     initialMessages: [
       {
@@ -18,6 +20,19 @@ export function ChatWidget() {
       }
     ]
   });
+
+  const suggestions = [
+    "Qual a stack favorita de Leonardo?",
+    "Resuma sua experiência com Backend",
+    "Como foi feito este portfólio?"
+  ];
+
+  const handleSuggestionClick = (text: string) => {
+    append({
+      role: 'user',
+      content: text
+    });
+  };
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -31,7 +46,8 @@ export function ChatWidget() {
       {isOpen && (
         <div className="mb-4 w-[90vw] sm:w-[380px] h-[500px] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300">
 
-          <div className="p-4 text-white flex justify-between items-center">
+          {/* Header */}
+          <div className="p-4 text-white flex justify-between items-center bg-zinc-900 border-b border-zinc-800">
             <div className="flex items-center gap-2.5">
               <div className="p-1.5 bg-white/10 rounded-lg">
                 <Sparkles size={16} className="text-emerald-400" />
@@ -52,7 +68,7 @@ export function ChatWidget() {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/50 scrollbar-thin scrollbar-thumb-border">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/30 scrollbar-thin scrollbar-thumb-border">
             {messages.map((m) => (
               <div
                 key={m.id}
@@ -63,11 +79,49 @@ export function ChatWidget() {
                   {m.role === 'user' ? <User size={14} className="text-zinc-600 dark:text-zinc-300"/> : <Bot size={14} className="text-emerald-600 dark:text-emerald-400"/>}
                 </div>
 
-                <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed max-w-[85%] shadow-sm
+                <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed max-w-[85%] shadow-sm overflow-hidden
                   ${m.role === 'user'
                     ? 'bg-zinc-900 text-white rounded-tr-sm'
                     : 'bg-card border border-border text-foreground rounded-tl-sm'}`}>
-                  {m.content}
+                  
+                  {m.role === 'user' ? (
+                    m.content
+                  ) : (
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
+                        ul: ({children}) => <ul className="list-disc pl-4 mb-2 space-y-1">{children}</ul>,
+                        ol: ({children}) => <ol className="list-decimal pl-4 mb-2 space-y-1">{children}</ol>,
+                        li: ({children}) => <li className="pl-1">{children}</li>,
+                        a: ({href, children}) => (
+                          <a href={href} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline font-medium break-all">
+                            {children}
+                          </a>
+                        ),
+                        strong: ({children}) => <span className="font-bold text-foreground">{children}</span>,
+                        code: ({children, className, ...props}) => {
+                          const isInline = !className?.includes('language-');
+                          return isInline ? (
+                            <code className="bg-muted/50 px-1.5 py-0.5 rounded text-xs font-mono border border-border/50 text-emerald-600 dark:text-emerald-400">
+                              {children}
+                            </code>
+                          ) : (
+                            <div className="my-2 rounded-lg overflow-hidden border border-border/50 bg-zinc-950">
+                              <div className="bg-zinc-900 px-3 py-1 border-b border-zinc-800 text-[10px] text-zinc-400">
+                                Code
+                              </div>
+                              <code className="block p-3 text-xs font-mono text-zinc-300 overflow-x-auto">
+                                {children}
+                              </code>
+                            </div>
+                          )
+                        }
+                      }}
+                    >
+                      {m.content}
+                    </ReactMarkdown>
+                  )}
                 </div>
               </div>
             ))}
@@ -87,6 +141,21 @@ export function ChatWidget() {
             <div ref={messagesEndRef} />
           </div>
 
+          {messages.length === 1 && !isLoading && (
+            <div className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-none fade-in slide-in-from-bottom-2 duration-500">
+              {suggestions.map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className="whitespace-nowrap flex items-center gap-1.5 text-xs bg-muted border border-border hover:border-emerald-500/50 hover:bg-emerald-500/5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all rounded-full px-3 py-1.5 text-muted-foreground"
+                >
+                  {suggestion}
+                  <ArrowRight size={10} className="opacity-50" />
+                </button>
+              ))}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="p-3 bg-background border-t border-border flex gap-2">
             <input
               className="flex-1 bg-muted/50 border border-border hover:border-zinc-400 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-sm outline-none transition-all placeholder:text-muted-foreground"
@@ -94,8 +163,8 @@ export function ChatWidget() {
               onChange={handleInputChange}
               placeholder="Pergunte sobre meus projetos..."
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isLoading || !input.trim()}
               className="bg-zinc-900 text-white p-2.5 rounded-xl hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm flex items-center justify-center w-10 h-10"
             >
@@ -111,7 +180,7 @@ export function ChatWidget() {
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping opacity-0 group-hover:opacity-100 duration-1000" />
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
-        
+
         {!isOpen && (
           <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
