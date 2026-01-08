@@ -10,7 +10,6 @@ import { getPortfolioData } from './lib/api';
 import { AnalyticsDashboard } from './components/sections/AnalyticsDashboard';
 import { ChatWidget } from './components/ui/ChatWidget';
 import { CommandPaletteWrapper } from './components/ui/CommandPaletteWrapper';
-import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -37,15 +36,4 @@ export default async function Home() {
       <CommandPaletteWrapper />
     </>
   );
-}
-
-export const metadata: Metadata = {
-  metadataBase: new URL('https://portfolio-integrado.up.railway.app/'),
-  title: 'Leonardo Ramos | Desenvolvedor e Entusiasta',
-  description: 'Portfólio de Leonardo Ramos - Projetos, habilidades e métricas em tempo real.',
-  openGraph: {
-    title: 'Leonardo Ramos - Portfolio',
-    description: 'Veja meus projetos e métricas de código em tempo real.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
-  },
 }

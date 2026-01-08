@@ -14,8 +14,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio Inteligente",
-  description: "Monitore e Avalie meus Projetos",
+  metadataBase: new URL("https://portfolio-integrado.up.railway.app"),
+  title: {
+    default: "Leonardo Ramos | Desenvolvedor e Entusiasta",
+    template: "%s | Leonardo Ramos",
+  },
+  description:
+    "Portfólio de Leonardo Ramos - Projetos, habilidades e métricas em tempo real.",
+  openGraph: {
+    title: "Leonardo Ramos - Portfolio",
+    description: "Veja meus projetos e métricas de código em tempo real.",
+    url: "/",
+    siteName: "Leonardo Ramos",
+    locale: "pt_BR",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
 };
 
 export default function RootLayout({
