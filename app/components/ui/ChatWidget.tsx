@@ -159,7 +159,6 @@ export function ChatWidget() {
 
           <form onSubmit={handleSubmit} className="p-3 bg-background border-t border-border flex gap-2">
             <input
-              className="flex-1 bg-muted/50 border border-border hover:border-zinc-400 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-sm outline-none transition-all placeholder:text-muted-foreground"
               className="flex-1 bg-muted/50 border border-border hover:border-border focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none transition-all placeholder:text-muted-foreground"
               value={input}
               onChange={handleInputChange}
