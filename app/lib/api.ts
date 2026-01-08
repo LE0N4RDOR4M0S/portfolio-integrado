@@ -86,16 +86,24 @@ export async function getPortfolioData() {
     }
 
     const scores = projectsRaw.filter(p => p.projectScore).map(p => p.projectScore!);
-    
+
+    const cutoff30Days = new Date();
+    cutoff30Days.setDate(cutoff30Days.getDate() - 30);
+
+    const recentCommits = activityRaw
+      .filter(item => item.date >= cutoff30Days)
+      .reduce((acc, curr) => acc + curr.commitsCount, 0);
+
     const avgActivity = scores.length ? Math.round(scores.reduce((a, c) => a + c.activityScore, 0) / scores.length) : 0;
     const avgConsistency = scores.length ? Math.round(scores.reduce((a, c) => a + c.consistencyScore, 0) / scores.length) : 0;
-    
+    const velocityScore = Math.min(recentCommits * 2, 100);
+
     const chartRadar = [
         { subject: 'Atividade', A: avgActivity, fullMark: 100 },
         { subject: 'Consistência', A: avgConsistency, fullMark: 100 },
         { subject: 'Qualidade', A: avgActivity > 0 ? 80 : 0, fullMark: 100 },
         { subject: 'Volume', A: Math.min(totalCommits / 20, 100), fullMark: 100 },
-        { subject: 'Velocidade', A: 70, fullMark: 100 },
+        { subject: 'Velocidade', A: velocityScore, fullMark: 100 },
     ];
 
     const charts: ChartData = {

@@ -7,7 +7,7 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 import { SectionTitle } from '../ui/SectionTitle';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, Info, X, Activity, Code2, Radar as RadarIcon } from 'lucide-react';
 import { Stats } from '../../types';
 import { useTheme } from 'next-themes';
 
@@ -25,9 +25,92 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+function MetricsModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-card border border-border w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+        
+        <div className="flex justify-between items-center p-4 border-b border-border bg-muted/20">
+          <h3 className="font-semibold flex items-center gap-2">
+            <Info size={18} className="text-blue-500" />
+            Como as métricas são calculadas?
+          </h3>
+          <button onClick={onClose} className="p-1 hover:bg-muted rounded-full transition-colors">
+            <X size={20} className="text-muted-foreground" />
+          </button>
+        </div>
+        <div className="p-6 space-y-6 text-sm overflow-y-auto max-h-[70vh]">
+          <div className="flex gap-3">
+            <div className="p-2 bg-blue-500/10 rounded-lg h-fit shrink-0 border border-blue-500/20">
+              <Activity size={16} className="text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-1 text-sm">Fluxo de Trabalho</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Cadência de commits nos <strong>últimos 90 dias</strong>. Dias sem atividade são preservados.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <div className="p-2 bg-green-500/10 rounded-lg h-fit shrink-0 border border-green-500/20">
+              <Code2 size={16} className="text-green-600 dark:text-green-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-1 text-sm">Especialização Tecnológica</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Distribuição de linguagens em repositórios públicos não arquivados.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <div className="p-2 bg-orange-500/10 rounded-lg h-fit shrink-0 border border-orange-500/20">
+              <RadarIcon size={16} className="text-orange-600 dark:text-orange-400" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-foreground mb-2 text-sm">Perfil de Engenharia (Radar)</h4>
+              
+              <div className="grid grid-cols-1 gap-2">
+                  <p className="text-muted-foreground text-xs leading-tight">
+                    <strong className="text-foreground">Velocidade:</strong> Ritmo atual baseado nos últimos 30 dias.
+                  </p>
+                  <p className="text-muted-foreground text-xs leading-tight">
+                    <strong className="text-foreground">Volume:</strong> Soma total de commits desde o início da carreira.
+                  </p>
+                  <p className="text-muted-foreground text-xs leading-tight">
+                    <strong className="text-foreground">Atividade:</strong> Frequência média de commits.<br/>
+                  </p>
+                  <p className="text-muted-foreground text-xs leading-tight">
+                    <strong className="text-foreground">Consistência:</strong> Regularidade sem intervalos longos.
+                  </p>
+                  <p className="text-muted-foreground text-xs leading-tight">
+                    <strong className="text-foreground">Qualidade:</strong> Saúde dos projetos. Avalia READMEs, descrições claras e boas práticas de versionamento e documentação.
+                  </p>
+              </div>
+            </div>
+          </div>
+      </div>
+        <div className="p-4 bg-muted/20 border-t border-border flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-foreground text-background text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+          >
+            Entendi
+          </button>
+        </div>
+
+      </div>
+      
+      <div className="absolute inset-0 -z-10" onClick={onClose} />
+    </div>
+  );
+}
+
 export function AnalyticsDashboard({ stats }: { stats: Stats }) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -48,8 +131,20 @@ export function AnalyticsDashboard({ stats }: { stats: Stats }) {
   }
 
   return (
-    <section id='analyticsdashboard' className="mb-16">
-      <SectionTitle title="Análise de métricas" icon={BarChart3} />
+    <section id='analyticsdashboard' className="mb-16 relative">
+      
+      <div>
+        <SectionTitle title="Análise de métricas" icon={BarChart3} />
+        <button
+          onClick={() => setShowInfo(true)}
+          className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-primary transition-colors bg-muted/30 px-3 py-1.5 rounded-full border border-border hover:border-primary/30"
+        >
+          <Info size={14} />
+          <span>Entenda os dados</span>
+        </button>
+      </div>
+
+      {showInfo && <MetricsModal onClose={() => setShowInfo(false)} />}
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         

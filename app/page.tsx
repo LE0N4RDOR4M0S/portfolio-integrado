@@ -10,6 +10,7 @@ import { getPortfolioData } from './lib/api';
 import { AnalyticsDashboard } from './components/sections/AnalyticsDashboard';
 import { ChatWidget } from './components/ui/ChatWidget';
 import { CommandPaletteWrapper } from './components/ui/CommandPaletteWrapper';
+import { Guestbook } from './components/sections/Guestbook';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -29,6 +30,7 @@ export default async function Home() {
           <Experience />
           <Education />
           <Projects data={projects} />
+          <Guestbook />
           <Footer />
         </div>
       </main>
