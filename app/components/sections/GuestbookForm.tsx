@@ -35,7 +35,7 @@ export function GuestbookForm({ user }: { user: any }) {
         name="message"
         required
         placeholder={`Deixe uma mensagem como ${user.name}...`}
-        className="w-full p-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+        className="w-full p-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-xs sm:placeholder:text-sm"
         maxLength={500}
       />
       <div className="flex justify-between items-center mb-2">

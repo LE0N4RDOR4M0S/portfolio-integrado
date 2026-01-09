@@ -11,7 +11,7 @@ export function SignInButton() {
   const handleLogin = async () => {
     setIsLoading(true);
     try {
-      await signIn('github', { callbackUrl: '/#guestbook' }); 
+      await signIn('github', { callbackUrl: '/#guestbook' });
     } catch (error) {
       console.error("Erro ao logar", error);
       setIsLoading(false);
@@ -22,7 +22,7 @@ export function SignInButton() {
     <button
       onClick={handleLogin}
       disabled={isLoading}
-      className="flex items-center gap-2 bg-[#24292F] hover:bg-[#24292F]/90 text-white font-medium py-2.5 px-5 rounded-lg transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+      className="flex items-center gap-2 font-medium py-2.5 px-5 rounded-lg transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed bg-[#24292F] hover:bg-[#24292F]/90 text-white dark:bg-white dark:text-[#24292F] dark:hover:bg-white/90 dark:border dark:border-border"
     >
       {isLoading ? (
         <Loader2 size={20} className="animate-spin" />

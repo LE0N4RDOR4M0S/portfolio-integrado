@@ -34,7 +34,7 @@ export function Projects({ data }: { data: Project[] }) {
             <Info size={14} />
             <span className="hidden sm:inline">Como funciona?</span>
         </button>
-        <div className="flex items-center gap-2 self-end md:self-auto">
+        <div className="hidden md:flex items-center gap-2 self-end md:self-auto">
 
             <div className="flex gap-1 bg-muted p-1 rounded-lg border border-border">
                 <button
@@ -66,7 +66,7 @@ export function Projects({ data }: { data: Project[] }) {
 
       <div className={viewMode === 'grid' 
         ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" 
-        : "flex flex-col gap-4"
+        : "hidden md:flex flex-col gap-4"
       }>
         {visibleProjects.map((repo) => (
           <div 
