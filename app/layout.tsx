@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 
+const BASE_URL = "https://portfolio-integrado.up.railway.app";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -14,21 +16,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio-integrado.up.railway.app"),
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: "Leonardo Ramos | Desenvolvedor e Entusiasta",
+    default: "Leonardo Ramos | Desenvolvedor Full Stack e Entusiasta",
     template: "%s | Leonardo Ramos",
   },
-  description:
-    "Portfólio de Leonardo Ramos - Projetos, habilidades e métricas em tempo real.",
+  description: "Explore um portfólio data-driven com métricas reais de código. Projetos de Engenharia de Software, Back-end e Inteligência Artificial auditados em tempo real.",
+  keywords: ["Desenvolvedor Fullstack", "Engenheiro de Software", "Next.js", "React", "IA", "Data Driven", "Portfolio", "Leonardo Ramos", "Back-end"],
   openGraph: {
-    title: "Leonardo Ramos - Portfolio",
-    description: "Veja meus projetos e métricas de código em tempo real.",
-    url: "/",
-    siteName: "Leonardo Ramos",
+    title: "Leonardo Ramos | Desenvolvedor de Software Full Stack & Soluções de IA",
+    description: "Portfólio data-driven. Veja métricas reais de projetos e análises de IA.",
+    url: BASE_URL,
+    siteName: "Leonardo Ramos Portfolio",
     locale: "pt_BR",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Preview do Portfolio de Leonardo Ramos",
+      },
+    ],
   },
 };
 

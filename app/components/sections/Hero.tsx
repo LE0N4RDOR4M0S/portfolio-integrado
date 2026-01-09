@@ -1,5 +1,6 @@
 import { Github, Linkedin, Mail, Phone, BookOpen, Download } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Hero() {
   return (
@@ -22,8 +23,15 @@ export function Hero() {
           </p>
         </div>
         <div className="flex-shrink-0">
-          <div className="relative h-40 w-40 md:h-48 md:w-48 rounded-xl bg-gradient-to-br from-muted to-card border border-border shadow-lg flex items-center justify-center overflow-hidden">
-            <img src="/perfil.jpg" className="rounded-xl object-cover w-full h-full" alt="Leonardo Ramos" />
+          <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-xl overflow-hidden">
+            <Image
+              src="/perfil.jpg"
+              alt="Leonardo Ramos"
+              fill // Ocupa o container pai
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority // Carrega instantaneamente (Crucial para LCP)
+            />
           </div>
         </div>
       </div>

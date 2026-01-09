@@ -81,7 +81,6 @@ export function Projects({ data }: { data: Project[] }) {
               <div className={`flex ${viewMode === 'list' ? 'items-center' : 'justify-between items-start'} mb-3`}>
                 <h3 className="font-semibold text-foreground text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
                   {repo.name}
-                  {/* Ícone sutil indicando clique */}
                   <FileText size={14} className="text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </h3>
                 
