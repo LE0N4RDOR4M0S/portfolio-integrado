@@ -72,7 +72,7 @@ A IA **não “acha” nada**.
 
 Ela:
 
-* busca dados reais no PostgreSQL
+* busca dados reais
 * injeta contexto técnico (stack, scores, resumos)
 * constrói o prompt dinamicamente
 
@@ -100,14 +100,17 @@ Script de sincronização que:
 ├── prisma/
 │   └── schema.prisma         # Modelagem de Dados
 ├── scripts/
-│   └── sync-github.ts        # Motor de ingestão + cálculo de score
-└── src/
-    ├── app/
-    │   ├── api/chat/         # Endpoint de IA
-    │   └── components/       # UI
-    └── lib/
-        ├── ai-context.ts     # Construção do dossiê da IA
-        └── utils.ts          # Sanitização de Markdown e helpers
+│   ├── calculate-scores.ts   # Algoritmo de scoring detalhado
+│   ├── run-all.ts            # Script maestro para chamada dos scripts de ingestão de calculo de score
+│   ├── sync-commits.ts       # Ingestão de dados dos commits de cada repositório
+│   └── sync-github.t         # Ingestão de dados dos repositorios publicos não arquivados
+└── app/
+    ├── api/
+    │   ├── chat/             # Endpoint de IA
+    │   ├── auth/             # Endpoint de autenticação pelo Github
+    |   ├── projects/         # Endpoint de projetos
+    |   └── stats/            # Endpoint de status
+    ├── components/
 ```
 
 ## Destaques de Código
@@ -118,7 +121,7 @@ Script de sincronização que:
 | Context Builder  | `lib/ai-context.ts`      | Cruza bio + dados do banco pra formar a “memória” da IA |
 | Streaming AI     | `api/chat/route.ts`      | Inferência via Groq com latência mínima                 |
 | Markdown Cleaner | `lib/utils.ts`           | Remove lixo visual dos READMEs pra economizar tokens       |
-| GitHub Sync      | `scripts/sync-github.ts` | Coleta dados e calcula score de saúde do projeto          |
+| GitHub Sync      | `scripts/sync-github.ts` | Coleta dados dos repositorios diretamente do github        |
 
 ## Como Rodar Localmente
 
@@ -143,6 +146,10 @@ Crie o `.env` na raiz:
 DATABASE_URL="postgresql://user:pass@localhost:5432/portfolio"
 GITHUB_TOKEN="ghp_sua_chave_github"
 GROQ_API_KEY="gsk_sua_chave_groq"
+GITHUB_ID="sua_github_client_id"
+GITHUB_SECRET="sua_github_client_secret"
+NEXTAUTH_SECRET="gerar_um_segredo"
+NEXTAUTH_URL="http://localhost:3001"
 ```
 
 ### Passo 2: Banco e Ingestão
@@ -171,11 +178,3 @@ npm run dev
 * **AI SDK:** Vercel AI SDK
 * **Visualização:** Recharts
 * **UI:** Tailwind CSS + Shadcn/UI
-
-## Observação final (importante)
-
-Esse projeto **não é sobre parecer bom**.
-É sobre **provar competência com dados**, algo que portfólio tradicional nunca fez direito.
-
-Se quiser adaptar pra outro perfil, empresa ou stack: é só trocar a fonte de dados.
-A lógica continua válida.
