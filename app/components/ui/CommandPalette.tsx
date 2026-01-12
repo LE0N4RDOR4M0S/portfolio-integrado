@@ -45,7 +45,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   };
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('leonardoramos.dev@gmail.com').then(() => {
+    navigator.clipboard.writeText('leoolivramos@gmail.com').then(() => {
       setCopied(true);
       setTimeout(() => {
         setCopied(false);
