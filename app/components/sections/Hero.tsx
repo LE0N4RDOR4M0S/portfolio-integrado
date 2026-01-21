@@ -23,16 +23,18 @@ export function Hero() {
           </p>
         </div>
         <div className="flex-shrink-0">
-          <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-xl overflow-hidden">
+          <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-xl overflow-hidden contain-layout">
             <Image
               src="/perfil.jpg"
               alt="Leonardo Ramos"
               fill
               fetchPriority="high"
               className="object-cover"
-              sizes="(max-width: 768px) 160px , 256px"
+              sizes="(max-width: 768px) 160px, 256px"
               priority
-              quality={90}
+              quality={85}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8VAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
             />
           </div>
         </div>
@@ -62,7 +64,14 @@ export function Hero() {
   );
 }
 
-function SocialButton({ href, icon: Icon, label, download }: any) {
+interface SocialButtonProps {
+  href: string;
+  icon: React.ComponentType<{ size: number }>;
+  label: string;
+  download?: boolean;
+}
+
+function SocialButton({ href, icon: Icon, label, download }: SocialButtonProps) {
   return (
     <Link 
       href={href} 
