@@ -27,10 +27,12 @@ export function Hero() {
             <Image
               src="/perfil.jpg"
               alt="Leonardo Ramos"
-              fill // Ocupa o container pai
+              fill
+              fetchPriority="high"
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority // Carrega instantaneamente (Crucial para LCP)
+              sizes="(max-width: 768px) 160px , 256px"
+              priority
+              quality={90}
             />
           </div>
         </div>
